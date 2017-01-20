@@ -6,7 +6,7 @@
 /*   By: videsvau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/13 01:48:52 by videsvau          #+#    #+#             */
-/*   Updated: 2017/01/13 08:03:26 by videsvau         ###   ########.fr       */
+/*   Updated: 2017/01/20 19:32:26 by videsvau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,11 @@ int		get_next_line(const int fd, char **line)
 	if (fd < 0 || line == NULL || read(fd, buff, 0) < 0)
 		return (-1);
 	curr = ft_manage_fd(fd, &chain);
-	while ((end = read(fd, buff, BUFF_SIZE)))
+	if (curr->content != NULL && ft_strchr(curr->content, 10))
+		end = 1;
+	else
+		end = 0;
+	while (end == 0 && (end = read(fd, buff, BUFF_SIZE)))
 	{
 		buff[end] = '\0';
 		tmp = ft_strjoin(curr->content, buff);
