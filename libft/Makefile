@@ -6,7 +6,7 @@
 #    By: videsvau <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/14 19:48:14 by videsvau          #+#    #+#              #
-#    Updated: 2017/01/13 08:11:02 by videsvau         ###   ########.fr        #
+#    Updated: 2017/01/30 22:36:38 by videsvau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,6 @@ NAME = libft.a
 SOURCES = ft_atoi.c\
 		  ft_bzero.c\
 		  ft_isalnum.c\
-		  ft_strjoin_free.c\
 		  ft_isalpha.c\
 		  ft_isascii.c\
 		  ft_isdigit.c\
