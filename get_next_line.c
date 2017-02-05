@@ -6,7 +6,7 @@
 /*   By: videsvau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/13 01:48:52 by videsvau          #+#    #+#             */
-/*   Updated: 2017/01/31 20:53:22 by videsvau         ###   ########.fr       */
+/*   Updated: 2017/02/05 16:57:58 by videsvau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_list	*ft_manage_fd(int fd, t_list **chain)
 	}
 	if (!(tmp = (t_list*)malloc(sizeof(t_list))))
 		return (NULL);
-	tmp->content = "";
+	tmp->content = ft_strnew(1);
 	tmp->content_size = fd;
 	ft_lstadd(chain, tmp);
 	tmp = *chain;
@@ -50,15 +50,15 @@ void	join(t_list **alst, char *buff, int end)
 {
 	char	*ret;
 
-	ret = NULL;
-	(*alst)->content = ft_strdup((*alst)->content);
-	if ((ret = (char*)malloc(sizeof(char)
-	* ft_strlen((*alst)->content) + end + 1)) == NULL)
-		return ;
-	ft_strcpy(ret, (*alst)->content);
-	ft_strncat(ret, buff, end);
+	ret = ft_strdup((*alst)->content);
 	free((*alst)->content);
-	(*alst)->content = ret;
+	if (((*alst)->content = (char*)malloc(sizeof(char)
+	* ft_strlen(ret) + end + 1)) == NULL)//	malloc
+		return ;
+	bzero((*alst)->content, ft_strlen(ret) + end + 1);
+	ft_strcpy((*alst)->content, ret);
+	ft_strncat((*alst)->content, buff, end);
+	free(ret);
 }
 
 int		get_next_line(const int fd, char **line)
@@ -76,11 +76,10 @@ int		get_next_line(const int fd, char **line)
 		join(&curr, buff, end);
 	if (end < BUFF_SIZE && !ft_strlen(curr->content))
 		return (0);
-	*line = ft_strsub(curr->content, 0, ft_stroccur(curr->content));
-	tmp = ft_strsub(curr->content, ft_stroccur(curr->content) + 1,
+	*line = ft_strsub(curr->content, 0, ft_stroccur(curr->content));//		malloc
+	tmp = ft_strsub(curr->content, ft_stroccur(curr->content) + 1,//		malloc
 			ft_strlen(curr->content) - ft_stroccur(curr->content));
-	free((curr->content));
+	free((curr->content));										//			free
 	(curr)->content = tmp;
-	//ft_putnbr(ft_strlen(curr->content));ft_putchar('\t');
 	return (1);
 }
