@@ -6,7 +6,7 @@
 /*   By: videsvau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/13 01:48:52 by videsvau          #+#    #+#             */
-/*   Updated: 2017/02/05 16:57:58 by videsvau         ###   ########.fr       */
+/*   Updated: 2017/02/06 12:10:57 by videsvau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ t_list	*ft_manage_fd(int fd, t_list **chain)
 	if (!(tmp = (t_list*)malloc(sizeof(t_list))))
 		return (NULL);
 	tmp->content = ft_strnew(1);
-	tmp->content_size = fd;
+	tmp->content_size = (size_t)fd;
+	tmp->next = NULL;
 	ft_lstadd(chain, tmp);
 	tmp = *chain;
 	return (tmp);
@@ -36,12 +37,11 @@ int		ft_stroccur(char *src)
 {
 	int i;
 
-	i = 0;
-	while (src[i])
+	i = -1;
+	while (src[++i])
 	{
 		if (src[i] == 10)
 			return (i);
-		i++;
 	}
 	return (i);
 }
@@ -53,7 +53,7 @@ void	join(t_list **alst, char *buff, int end)
 	ret = ft_strdup((*alst)->content);
 	free((*alst)->content);
 	if (((*alst)->content = (char*)malloc(sizeof(char)
-	* ft_strlen(ret) + end + 1)) == NULL)//	malloc
+	* ft_strlen(ret) + end + 1)) == NULL)
 		return ;
 	bzero((*alst)->content, ft_strlen(ret) + end + 1);
 	ft_strcpy((*alst)->content, ret);
@@ -63,7 +63,7 @@ void	join(t_list **alst, char *buff, int end)
 
 int		get_next_line(const int fd, char **line)
 {
-	static t_list	*chain;
+	static t_list	*chain = NULL;
 	t_list			*curr;
 	char			buff[BUFF_SIZE + 1];
 	char			*tmp;
@@ -76,10 +76,10 @@ int		get_next_line(const int fd, char **line)
 		join(&curr, buff, end);
 	if (end < BUFF_SIZE && !ft_strlen(curr->content))
 		return (0);
-	*line = ft_strsub(curr->content, 0, ft_stroccur(curr->content));//		malloc
-	tmp = ft_strsub(curr->content, ft_stroccur(curr->content) + 1,//		malloc
+	*line = ft_strsub(curr->content, 0, ft_stroccur(curr->content));
+	tmp = ft_strsub(curr->content, ft_stroccur(curr->content) + 1,
 			ft_strlen(curr->content) - ft_stroccur(curr->content));
-	free((curr->content));										//			free
+	free((curr->content));
 	(curr)->content = tmp;
 	return (1);
 }
